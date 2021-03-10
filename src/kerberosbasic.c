@@ -156,6 +156,13 @@ static krb5_error_code verify_krb5_user(
         goto end;
     }
 
+    ret = krb5_verify_init_creds(context, &creds, server, NULL, NULL, NULL);
+    /* If we couldn't verify credentials against keytab, return error */
+    if (ret) {
+        set_basicauth_error(context, ret);
+        goto end;
+    }
+
 end:
     krb5_free_cred_contents(context, &creds);
 
